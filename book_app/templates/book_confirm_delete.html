@@ -1,0 +1,88 @@
+<head>
+  <!-- Add Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<link href="/book_app/style.css" rel="stylesheet" />
+
+<!-- Delete Book Confirmation Template -->
+<div
+  class="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-4"
+>
+  <div
+    class="w-full max-w-md bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100"
+  >
+    <div class="bg-rose-500 p-6">
+      <h2 class="text-2xl font-medium text-white">Delete Book</h2>
+    </div>
+
+    <div class="p-8">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="flex-shrink-0 p-2 rounded-full bg-rose-100">
+          <svg
+            class="h-8 w-8 text-rose-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            ></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium text-slate-800">Are you sure?</h3>
+          <p class="text-slate-600 text-sm">
+            You're about to delete "{{ book.title }}"
+          </p>
+        </div>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-end space-x-4 mt-8">
+          <a
+            href="{% url 'book_list' %}"
+            class="px-5 py-2 rounded-lg text-slate-600 font-medium border border-slate-200 bg-white hover:bg-slate-50 hover:text-slate-800 transition-all duration-200"
+          >
+            Cancel
+          </a>
+          <button>
+            <a
+              href="{% url 'book_delete' pk=book.pk %}"
+              class="delete-link px-5 py-2 rounded-lg font-medium text-white bg-rose-500 hover:bg-rose-600 shadow-sm transition-all duration-200 hover:bg-rose-50 transition-colors duration-200"
+            >
+              Delete
+            </a>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.querySelectorAll(".delete-link").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          const url = this.href;
+          Swal.fire({
+            title: "Are you sure?",
+            text: "This will delete the book permanently.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#e3342f",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Yes, delete it!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = url;
+            }
+          });
+        });
+      });
+    </script>
+  </div>
+</div>
